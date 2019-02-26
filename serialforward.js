@@ -18,6 +18,10 @@
 
 var socket = chrome.sockets.tcpServer;
 
+function log(message) {
+    document.getElementById('log').textContent += message + "\n";
+}
+
 var serialConnectionId = -1
 
 var onSerialReceive = function(info) {
@@ -62,6 +66,7 @@ function onAccept(info) {
 
 function onListenCallback(socketId, resultCode) {
     if (resultCode < 0) {
+	log("Error listening:" + chrome.runtime.lastError.message);
 	return;
     }
     serverSocketId = socketId;
@@ -71,6 +76,7 @@ function onListenCallback(socketId, resultCode) {
 function listenAndAccept(socketId) {
     var tcpPortField = document.getElementById('tcpport')
     var tcpPort = parseInt(tcpPortField.value)
+    log('Listen on port ' + tcpPort)
     chrome.sockets.tcpServer.listen(socketId,
 				    "0.0.0.0", tcpPort, function(resultCode) {
 					onListenCallback(socketId, resultCode)
@@ -110,6 +116,7 @@ function enumPorts() {
 }
 
 function startForward() {
+    log('starting forward')
     initSerial()
     initTcp()
 }

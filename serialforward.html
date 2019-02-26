@@ -22,6 +22,15 @@
     <script type="text/javascript" src="serialforward.js"></script>
 
     <style type="text/css">
+      body {
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
       #tcpport {
         width: 30%;
       }
@@ -33,15 +42,30 @@
       #startForward {
         width: 30%;
       }
+
+      #log {
+        display: block;
+        width: 90%;
+        height: 90%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #controlholder {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
   </head>
   <body>
-    <center>
+    <center id=controlholder>
       <form action="#">
 	<select name="port" id="port" width=20 />
 	<input type=text name="tcpport" id="tcpport" value="7901" width=5 />
 	<button type="button" id="startForward">Start forwarding</button>
       </form>
     </center>
+    <textarea id="log" rows=20></textarea>
   </body>
 </html>
