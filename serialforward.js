@@ -69,8 +69,10 @@ function onListenCallback(socketId, resultCode) {
 }
 
 function listenAndAccept(socketId) {
+    var tcpPortField = document.getElementById('tcpport')
+    var tcpPort = parseInt(tcpPortField.value)
     chrome.sockets.tcpServer.listen(socketId,
-				    "0.0.0.0", 7901, function(resultCode) {
+				    "0.0.0.0", tcpPort, function(resultCode) {
 					onListenCallback(socketId, resultCode)
 				    });
 }
@@ -83,11 +85,28 @@ function initTcp() {
 }
 
 function initSerial() {
-    chrome.serial.connect("/dev/ttyACM0", {bitrate: 115200}, onSerialConnect);
+    var portSelector = document.getElementById('port')
+    var opt = portSelector.options[portSelector.selectedIndex];
+    chrome.serial.connect(opt.value, {bitrate: 115200}, onSerialConnect);
 }
 
 function onInit() {
+    enumPorts()
     document.getElementById("startForward").addEventListener("click", function() {startForward(); return false; });
+}
+
+function enumPorts() {
+    var portSelector = document.getElementById('port')
+    portSelector.innerHTML = '';
+    chrome.serial.getDevices(
+	function(ports) {
+	    for (var i=0; i<ports.length; i++) {
+		var option = document.createElement("option");
+		option.text = ports[i].path;
+		option.name = ports[i].path;
+		portSelector.add(option, portSelector[0]);
+	    }
+	});
 }
 
 function startForward() {
